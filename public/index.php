@@ -159,6 +159,13 @@ switch ($page) {
                                     $BS->block(3, '<h2>Mac + Installer</h2><a href="download.php?kind=mac">Download .zip</a>')
                                     )
                             );
+            $TP->appendContent($BS->row(
+                                    $BS->block(12, '<br/><br/>' )
+                                    ) .
+                               $BS->row(
+                                    $BS->block(12, '<a href="http://wiki.enrise.com/wiki/VPN_instellen" target="_blank">Wiki pagina - Meer informatie over het instellen van je VPN verbinding.</a>' )
+                                    )
+                            );
         } else { //Not allowed to use VPN
             header("HTTP/1.0 403 Forbidden");
             $TP->appendContent($BS->errormessage($lang->t('vpn_not_allowed')));
