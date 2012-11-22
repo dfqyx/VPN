@@ -24,7 +24,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['ip'])) {
     header('Location: index.php');
     die;
 }
-if ($_SESSION['ip'] != $_SERVER["REMOTE_ADDR"]) {
+if ($_SESSION['ip'] != $_SERVER['REMOTE_ADDR']) {
     header('Location: index.php');
     die;
 }
@@ -111,7 +111,7 @@ try {
     $ret;
     exec('/srv/http/portal/current/generateKey.sh ' . escapeshellarg($_SESSION['username']) . ' ' . escapeshellarg($configFolder), $output, $ret);
     if ($ret !== 0) {
-	throw new exception('An error has occured while generating or retrieving user certificate');
+        throw new exception('An error has occured while generating or retrieving user certificate');
     }
 
     file_put_contents($configFolder . DIRECTORY_SEPARATOR  . $_SESSION['username'] . '@vpn.enrise.com.ovpn',$ovpnContent);

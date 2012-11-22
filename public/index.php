@@ -52,13 +52,18 @@ switch ($page) {
      * Default login page + login form.
      */
     case 'home':
-        $TP->setTitle($lang->t('login'));
-        $TP->setContent($BS->heroUnit($lang->t('hometitle'), $lang->t('hometext')));
-        $TP->appendContent($BS->row(
-                                    $BS->block(12,
-                                        $BS->loginForm($lang->t('username'), $lang->t('password'), $lang->t('signin'), 'login.html'))
-                                    )
-                            );
+        if ($_SESSION["ip"] != $_SERVER["REMOTE_ADDR"] || !isset($_SESSION['username'])) {
+            $TP->setTitle($lang->t('login'));
+            $TP->setContent($BS->heroUnit($lang->t('hometitle'), $lang->t('hometext')));
+            $TP->appendContent($BS->row(
+                                        $BS->block(12,
+                                            $BS->loginForm($lang->t('username'), $lang->t('password'), $lang->t('signin'), 'login.html'))
+                                        )
+                                );
+        } else {
+            header('location:downloads.html');
+            die;
+        }
         break;
     
     /**
@@ -68,7 +73,7 @@ switch ($page) {
         $TP->setTitle($lang->t('logout'));
         $TP->setContent($BS->heroUnit($lang->t('logout'), $lang->t('loggedouttext')));
         session_destroy();
-        session_regenerate_id(true); //Regen the sessionid
+        session_regenerate_id(true);
         break;
         
     /**
@@ -79,6 +84,12 @@ switch ($page) {
             header('Location: index.php');
             die;
         }
+        
+        if ($_SESSION["ip"] == $_SERVER["REMOTE_ADDR"] && isset($_SESSION['username'])) {
+            header('Location: downloads.html');
+            die;
+        }
+        
         $_POST["username"]=preg_replace("/[^a-z]+/", "", $_POST['username']);
         $TP->setTitle($lang->t('login'));
         if ($DB->getLoginsSince(BRUTEFORCE_MINUTES)>BRUTEFORCE_ATTEMPTS) {
@@ -86,7 +97,7 @@ switch ($page) {
             die;
         }
         $options = array(
-            'host'                   => '172.17.0.5',
+            'host'                   => 'dc02.enrise.com',
             'useStartTls'            => false,
             'username'               => $_POST['username'],
             'password'               => $_POST['password'],
@@ -118,21 +129,29 @@ switch ($page) {
         }
         
         $allowed = 0;
+        
         $user = $_POST["username"];
         foreach ($result as $item) {
             if ($item['samaccountname'][0] == $user) {
                 $allowed = 1;
             }
         }
-        $TP->appendContent($BS->successmessage($lang->t('loggedin')));
         
-        if ($allowed==1) { //Allowed to use VPN. Show the downloadbuttons!
+        if ($allowed==1) {
+            $_SESSION["username"] = $_POST['username'];
+            $_SESSION["ip"] = $_SERVER["REMOTE_ADDR"]; //Session stealing security / logging 
+            header('location:downloads.html');
+            die;
+        }
+
+        break;
+        
+    case 'downloads':
+        
+        if ($_SESSION["ip"] == $_SERVER["REMOTE_ADDR"] && isset($_SESSION['username'])) { //Allowed to use VPN. Show the downloadbuttons!
         
             //Download.php generates everythin'.
             header("HTTP/1.0 200 OK");
-            $_SESSION["username"] = $_POST['username'];
-            $_SESSION["ip"] = $_SERVER["REMOTE_ADDR"]; //Session stealing security / logging 
-            
             $TP->appendContent($BS->row(
                                     $BS->block(3, '<H2>Alleen Config</H2><a href="download.php?kind=config">Download .zip</a>') .
                                     $BS->block(3, '<H2>Windows + Installer</H2><a href="download.php?kind=winexe">Download .zip</a>') .
@@ -144,6 +163,7 @@ switch ($page) {
             header("HTTP/1.0 403 Forbidden");
             $TP->appendContent($BS->errormessage($lang->t('vpn_not_allowed')));
         }
+        
         break;
     
     default: //404
