@@ -153,10 +153,10 @@ switch ($page) {
             //Download.php generates everythin'.
             header("HTTP/1.0 200 OK");
             $TP->appendContent($BS->row(
-                                    $BS->block(3, '<H2>Alleen Config</H2><a href="download.php?kind=config">Download .zip</a>') .
-                                    $BS->block(3, '<H2>Windows + Installer</H2><a href="download.php?kind=winexe">Download .zip</a>') .
-                                    $BS->block(3, '<H2>Linux</H2><a href="download.php?kind=linux">Download .zip</a>') .
-                                    $BS->block(3, '<H2>Mac + Installer</H2><a href="download.php?kind=mac">Download .zip</a>')
+                                    $BS->block(3, '<h2>Alleen Config</h2><a href="download.php?kind=config">Download .zip</a>') .
+                                    $BS->block(3, '<h2>Windows + Installer</h2><a href="download.php?kind=winexe">Download .zip</a>') .
+                                    $BS->block(3, '<h2>Linux</h2><a href="download.php?kind=linux">Download .zip</a>') .
+                                    $BS->block(3, '<h2>Mac + Installer</h2><a href="download.php?kind=mac">Download .zip</a>')
                                     )
                             );
         } else { //Not allowed to use VPN
@@ -168,7 +168,7 @@ switch ($page) {
     
     default: //404
         header("HTTP/1.0 404 Not Found");
-        $TP->setContent( $BS->row( $BS->block(12, '<H2>' . $lang->t('404title') . '</H2><p>' . $lang->t('404text') . '</p>') ) );
+        $TP->setContent( $BS->row( $BS->block(12, '<h2>' . $lang->t('404title') . '</h2><p>' . $lang->t('404text') . '</p>') ) );
         break;
 
 }
