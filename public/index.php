@@ -153,7 +153,7 @@ switch ($page) {
             //Download.php generates everythin'.
             header("HTTP/1.0 200 OK");
             $TP->appendContent($BS->row(
-                                    $BS->block(3, '<h2>Alleen Config</h2><a href="download.php?kind=config">Download .zip</a>') .
+                                    $BS->block(3, '<h2>Just Config files</h2><a href="download.php?kind=config">Download .zip</a>') .
                                     $BS->block(3, '<h2>Windows + Installer</h2><a href="download.php?kind=winexe">Download .zip</a>') .
                                     $BS->block(3, '<h2>Linux</h2><a href="download.php?kind=linux">Download .zip</a>') .
                                     $BS->block(3, '<h2>Mac + Installer</h2><a href="download.php?kind=mac">Download .zip</a>')
@@ -163,7 +163,7 @@ switch ($page) {
                                     $BS->block(12, '<br/><br/>' )
                                     ) .
                                $BS->row(
-                                    $BS->block(12, '<a href="http://wiki.enrise.com/wiki/VPN_instellen" target="_blank">Wiki pagina - Meer informatie over het instellen van je VPN verbinding.</a>' )
+                                    $BS->block(12, '<a href="http://wiki.enrise.com/wiki/VPN_instellen" target="_blank">Wiki page - More information on setting up your VPN.</a>' )
                                     )
                             );
         } else { //Not allowed to use VPN
